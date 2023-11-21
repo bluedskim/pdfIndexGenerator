@@ -8,6 +8,8 @@ import java.util.Collections;
 import java.util.List;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.interactive.documentnavigation.outline.PDDocumentOutline;
+import org.apache.pdfbox.pdmodel.interactive.documentnavigation.outline.PDOutlineItem;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.springframework.stereotype.Service;
 
@@ -51,12 +53,20 @@ public class PdfIndexGenegator {
 		Collections.sort(pageTexts);
 
 		PDDocument sortedPdf = new PDDocument();
+		PDDocumentOutline outline = new PDDocumentOutline();
+
 		int pageNo = 0;
 		for(PageText pageText : pageTexts ) {
 			pageNo++;
 			log.info("sorted pageNo={}, pageText={}, page={}", pageNo, pageText, pageText.getPage().toString());
 			sortedPdf.addPage(pageText.getPage());
+
+			PDOutlineItem item = new PDOutlineItem();
+			item.setTitle(pageText.getContent());
+			item.setDestination(pageText.getPage());
+			outline.addLast(item);
 		}
+		sortedPdf.getDocumentCatalog().setDocumentOutline(outline);
 		return sortedPdf;
 	}
 }
