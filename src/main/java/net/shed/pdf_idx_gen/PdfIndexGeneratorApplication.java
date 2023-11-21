@@ -1,7 +1,15 @@
 package net.shed.pdf_idx_gen;
 
+import java.io.IOException;
+import java.nio.file.Path;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,10 +21,24 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @Slf4j
 public class PdfIndexGeneratorApplication {
+	@Autowired
+	FileSystemStorageService fileSystemStorageService;
+
+	@Autowired
+	PdfIndexGenegator pdfIndexGenegator;
+
 	@PostMapping(value="/genIdx")
-	String index(@RequestParam("orgPdf") MultipartFile orgPdf) {
+	ResponseEntity<Resource> index(@RequestParam("orgPdf") MultipartFile orgPdf) throws IOException {
 		log.info("orgPdf={}", orgPdf.getOriginalFilename());
-		return orgPdf.getOriginalFilename();
+		//local에 첨부파일 저장
+		Path orgPdfPath = fileSystemStorageService.store(orgPdf);
+		//pdfIndexGenegator호출
+		Path resultPdfPath = pdfIndexGenegator.genIdx(orgPdfPath);
+		//byte stream으로 반환
+		Resource resultRsc =  new UrlResource(resultPdfPath.toUri());
+
+		return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
+				"attachment; filename=\"" + resultRsc.getFilename() + "\"").body(resultRsc);
 	}
 
 	public static void main(String[] args) {

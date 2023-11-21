@@ -6,5 +6,5 @@ curl -v -i -H 'Content-type:multipart/form-data' -F 'model=
 } \
 ;type=application/json' \
  -F 'orgPdf=@singASong.pdf;type=application/pdf' \
- --output result.json \
- http://localhost:8080/genIdx ; jq '.' result.json
+ --output result.pdf \
+ http://localhost:8080/genIdx
