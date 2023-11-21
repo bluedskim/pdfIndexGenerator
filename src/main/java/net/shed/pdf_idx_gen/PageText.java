@@ -11,8 +11,8 @@ import lombok.Setter;
 @Setter
 public class PageText implements Comparable<PageText>{
 	private String content;
-	private int pageNo;
-	private PDPage PDPage;
+	private int idx;
+	private PDPage page;
 
 	@Override
 	public int compareTo(PageText arg0) {
@@ -22,5 +22,9 @@ public class PageText implements Comparable<PageText>{
   @Override
   public boolean equals(Object arg0) {
 		return content.equals(((PageText)arg0).getContent());
+	}
+
+	public String toString() {
+		return content;
 	}
 }

@@ -16,35 +16,46 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @Slf4j
 public class PdfIndexGenegator {
-	public Path genIdx(Path orgPdfPath) throws IOException {
-		log.info("converting orgPdfPath={}" + orgPdfPath);
-		File indexedPdfFile = new File(
+	public Path sortPages(Path orgPdfPath) throws IOException {
+		log.info("converting orgPdfPath={}",  orgPdfPath);
+
+		PDDocument orgPdf = PDDocument.load(orgPdfPath.toFile());
+		PDDocument sortedPdf = sortPages(orgPdf);
+
+		File sortedPdfFile = new File(
 			orgPdfPath.getParent().toString()
 			+ File.separator
 			+ orgPdfPath.toFile().getName()
-			+ "_indexed"
+			+ "_sorted.pdf"
 		);
-		PDDocument orgPdf = PDDocument.load(orgPdfPath.toFile());
+
+		sortedPdf.save(sortedPdfFile);
+		sortedPdf.close();
+		return sortedPdfFile.toPath();
+	}
+
+	public PDDocument sortPages(PDDocument orgPdf) throws IOException {
 		PDFTextStripper reader = new PDFTextStripper();
 		List<PageText> pageTexts = new ArrayList<>();
 		for(int i = 0 ; i < orgPdf.getNumberOfPages() ; i++) {
 			reader.setStartPage(i);
 			reader.setEndPage(i);
 			String pageText = reader.getText(orgPdf);
-			log.info(pageText);
+			if(pageText.indexOf("\n") >= 0) {
+				pageText = pageText.substring(0, pageText.indexOf("\n"));
+			}
+			log.info("original idx={}, pageText={}", i, pageText);
 			pageTexts.add(new PageText(pageText, i, orgPdf.getPage(i)));
 		}
 
 		Collections.sort(pageTexts);
 
-		try(PDDocument indexedPdf = new PDDocument();) {
-			for(PageText pageText : pageTexts ) {
-				log.info(pageText.getContent());
-				indexedPdf.addPage(pageText.getPDPage());
-			}
-			indexedPdf.save(indexedPdfFile);
+		PDDocument sortedPdf = new PDDocument();
+		for(PageText pageText : pageTexts ) {
+			log.info("sorted idx={}, pageText={}", pageText.getIdx(), pageText);
+			//sortedPdf.addPage(pageText.getPage());
+			sortedPdf.addPage(orgPdf.getPage(pageText.getIdx()));
 		}
-
-		return indexedPdfFile.toPath();
+		return sortedPdf;
 	}
 }

@@ -33,7 +33,7 @@ public class PdfIndexGeneratorApplication {
 		//local에 첨부파일 저장
 		Path orgPdfPath = fileSystemStorageService.store(orgPdf);
 		//pdfIndexGenegator호출
-		Path resultPdfPath = pdfIndexGenegator.genIdx(orgPdfPath);
+		Path resultPdfPath = pdfIndexGenegator.sortPages(orgPdfPath);
 		//byte stream으로 반환
 		Resource resultRsc =  new UrlResource(resultPdfPath.toUri());
 
