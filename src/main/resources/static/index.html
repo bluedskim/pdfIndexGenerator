@@ -1,1 +1,25 @@
-index
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>pdf 페이지 정렬</title>
+</head>
+
+<body>
+
+	<h2>pdf 페이지 정렬</h2>
+
+	<form id="uploadForm" method="post" enctype="multipart/form-data" action="/genIdx">
+		<input type="file" name="orgPdf" id="fileInput" />
+		<button type="submit" id="uploadButton">업로드</button>
+	</form>
+
+	<div id="result"></div>
+
+	<!-- jQuery CDN 추가 -->
+	<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+</body>
+
+</html>
