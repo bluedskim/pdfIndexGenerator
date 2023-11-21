@@ -1,0 +1,10 @@
+### 파일업로드 샘플
+cd /home/dennis/dev/src/pdfIndexGenerator/src/test/resources/example
+
+curl -v -i -H 'Content-type:multipart/form-data' -F 'model=
+{
+} \
+;type=application/json' \
+ -F 'orgPdf=@singASong.pdf;type=application/pdf' \
+ --output result.json \
+ http://localhost:8080/genIdx ; jq '.' result.json
