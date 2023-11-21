@@ -18,7 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @Slf4j
 public class PdfIndexGenegator {
-	public Path sortPages(Path orgPdfPath) throws IOException {
+	public Path sortPages(String origFileName, Path orgPdfPath) throws IOException {
 		log.info("converting orgPdfPath={}",  orgPdfPath);
 
 		PDDocument orgPdf = PDDocument.load(orgPdfPath.toFile());
@@ -27,7 +27,7 @@ public class PdfIndexGenegator {
 		File sortedPdfFile = new File(
 			orgPdfPath.getParent().toString()
 			+ File.separator
-			+ orgPdfPath.toFile().getName()
+			+ origFileName
 			+ "_sorted.pdf"
 		);
 

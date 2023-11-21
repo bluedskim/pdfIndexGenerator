@@ -30,11 +30,8 @@ public class PdfIndexGeneratorApplication {
 	@PostMapping(value="/genIdx")
 	ResponseEntity<Resource> index(@RequestParam("orgPdf") MultipartFile orgPdf) throws IOException {
 		log.info("orgPdf={}", orgPdf.getOriginalFilename());
-		//local에 첨부파일 저장
 		Path orgPdfPath = fileSystemStorageService.store(orgPdf);
-		//pdfIndexGenegator호출
-		Path resultPdfPath = pdfIndexGenegator.sortPages(orgPdfPath);
-		//byte stream으로 반환
+		Path resultPdfPath = pdfIndexGenegator.sortPages(orgPdf.getOriginalFilename(), orgPdfPath);
 		Resource resultRsc =  new UrlResource(resultPdfPath.toUri());
 
 		return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
