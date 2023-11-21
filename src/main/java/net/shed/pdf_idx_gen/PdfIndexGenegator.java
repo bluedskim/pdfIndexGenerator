@@ -5,6 +5,7 @@ import java.nio.file.Path;
 import java.io.File;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.text.PDFTextStripper;
 import org.springframework.stereotype.Service;
 
 import lombok.extern.slf4j.Slf4j;
@@ -21,8 +22,13 @@ public class PdfIndexGenegator {
 			+ "_indexed"
 		);
 		PDDocument orgPdf = PDDocument.load(orgPdfPath.toFile());
+		PDFTextStripper reader = new PDFTextStripper();
 		try(PDDocument indexedPdf = new PDDocument();) {
 			for(int i = 0 ; i < orgPdf.getNumberOfPages() ; i++) {
+				reader.setStartPage(i);
+				reader.setEndPage(i);
+				String pageText = reader.getText(orgPdf);
+				log.info(pageText);
 				indexedPdf.addPage(orgPdf.getPage(i));
 			}
 			indexedPdf.save(indexedPdfFile);
