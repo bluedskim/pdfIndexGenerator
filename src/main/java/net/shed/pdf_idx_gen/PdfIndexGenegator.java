@@ -37,24 +37,25 @@ public class PdfIndexGenegator {
 	public PDDocument sortPages(PDDocument orgPdf) throws IOException {
 		PDFTextStripper reader = new PDFTextStripper();
 		List<PageText> pageTexts = new ArrayList<>();
-		for(int i = 0 ; i < orgPdf.getNumberOfPages() ; i++) {
+		for(int i = 1 ; i <= orgPdf.getNumberOfPages() ; i++) {
 			reader.setStartPage(i);
 			reader.setEndPage(i);
 			String pageText = reader.getText(orgPdf);
 			if(pageText.indexOf("\n") >= 0) {
 				pageText = pageText.substring(0, pageText.indexOf("\n"));
 			}
-			log.info("original idx={}, pageText={}", i, pageText);
-			pageTexts.add(new PageText(pageText, i, orgPdf.getPage(i)));
+			log.info("original idx={}, pageText={}, page={}", i, pageText, orgPdf.getPage(i-1).toString());
+			pageTexts.add(new PageText(pageText, orgPdf.getPage(i-1)));
 		}
 
 		Collections.sort(pageTexts);
 
 		PDDocument sortedPdf = new PDDocument();
+		int pageNo = 0;
 		for(PageText pageText : pageTexts ) {
-			log.info("sorted idx={}, pageText={}", pageText.getIdx(), pageText);
-			//sortedPdf.addPage(pageText.getPage());
-			sortedPdf.addPage(orgPdf.getPage(pageText.getIdx()));
+			pageNo++;
+			log.info("sorted pageNo={}, pageText={}, page={}", pageNo, pageText, pageText.getPage().toString());
+			sortedPdf.addPage(pageText.getPage());
 		}
 		return sortedPdf;
 	}

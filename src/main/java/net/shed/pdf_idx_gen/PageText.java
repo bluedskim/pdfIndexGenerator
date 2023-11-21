@@ -11,7 +11,6 @@ import lombok.Setter;
 @Setter
 public class PageText implements Comparable<PageText>{
 	private String content;
-	private int idx;
 	private PDPage page;
 
 	@Override

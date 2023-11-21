@@ -32,12 +32,13 @@ class PageTestSortTest {
 			contentStream.beginText();
 			contentStream.setFont(PDType1Font.TIMES_ROMAN, 12);
 			contentStream.showText((10 - i) + "_title");
+      contentStream.newLineAtOffset(25, 500);
 			contentStream.endText();
 			contentStream.close();
 
 			reader.setStartPage(i);
 			reader.setEndPage(i);
-			pageTexts.add(new PageText(reader.getText(pdf).trim(), i, newPage));
+			pageTexts.add(new PageText(reader.getText(pdf).trim(), newPage));
 
 		}
 
