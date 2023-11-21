@@ -2,6 +2,7 @@ package net.shed.pdf_idx_gen;
 
 import org.apache.pdfbox.pdmodel.PDPage;
 
+import org.apache.commons.lang3.StringUtils;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,12 +16,18 @@ public class PageText implements Comparable<PageText>{
 
 	@Override
 	public int compareTo(PageText arg0) {
-		return content.compareTo(arg0.getContent());
+		String stripedContent = StringUtils.stripAccents(content);
+		String stripedCompare = StringUtils.stripAccents(arg0.getContent());
+		return stripedContent.compareTo(stripedCompare);
 	}
 
   @Override
   public boolean equals(Object arg0) {
-		return content.equals(((PageText)arg0).getContent());
+		String stripedContent = StringUtils.stripAccents(content);
+		String stripedCompare = StringUtils.stripAccents(
+			((PageText)arg0).getContent()
+		);
+		return stripedContent.equals(stripedCompare);
 	}
 
 	public String toString() {
