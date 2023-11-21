@@ -20,7 +20,10 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
   developmentOnly 'org.springframework.boot:spring-boot-devtools'// https://mvnrepository.com/artifact/org.apache.pdfbox/pdfbox
 	implementation 'org.apache.pdfbox:pdfbox:2.0.30'
-	compileOnly 'org.projectlombok:lombok:1.18.30'
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+	testCompileOnly 'org.projectlombok:lombok'
+	testAnnotationProcessor 'org.projectlombok:lombok'
 	implementation 'org.apache.commons:commons-lang3:3.13.0'
 }
 
