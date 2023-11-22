@@ -1,6 +1,7 @@
 package net.shed.pdf_idx_gen;
 
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.nio.file.Path;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +36,7 @@ public class PdfIndexGeneratorApplication {
 		Resource resultRsc =  new UrlResource(resultPdfPath.toUri());
 
 		return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
-				"attachment; filename=\"" + resultRsc.getFilename() + "\"").body(resultRsc);
+				"attachment; filename=\"" + URLEncoder.encode(resultRsc.getFilename(), "utf-8") + "\"").body(resultRsc);
 	}
 
 	public static void main(String[] args) {
